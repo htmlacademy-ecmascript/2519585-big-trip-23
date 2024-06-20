@@ -15,24 +15,24 @@ export default class PointsModel extends Observable {
     this.#offersModel = offersModel;
   }
 
-  async init() {
-    try {
-      await Promise.all([this.#destinationsModel.init(), this.#offersModel.init()]);
-      const points = await this.#service.points;
-      this.#points = points.map(adaptToClient);
-      this._notify(UpdateType.INIT, {isError: false});
-    } catch {
-      this.#points = [];
-      this._notify(UpdateType.INIT, {isError: true});
-    }
-  }
-
   get() {
     return this.#points;
   }
 
   getById(id) {
     return this.#points.find((point)=>point.id === id);
+  }
+
+  async init() {
+    try {
+      await Promise.all([this.#destinationsModel.init(), this.#offersModel.init()]);
+      const points = await this.#service.points;
+      this.#points = points.map(adaptToClient);
+      this._notify(UpdateType.INIT, {isError: false});
+    } catch (err) {
+      this.#points = [];
+      this._notify(UpdateType.ERROR);
+    }
   }
 
   async update(updateType, point) {

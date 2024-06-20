@@ -3,13 +3,13 @@ import he from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import {EVENT_TYPES, EditType, POINT_EMPTY} from '../const.js';
-import {toCapitalize, formatStringToDelimiterDate} from '../utils.js';
+import {capitalizeFirstLetter, formatStringToDelimiterDate} from '../utils.js';
 
 const createTypesListTemplate = (currentType) => {
   const typeListMarkup = EVENT_TYPES.reduce((markup, type)=>`${markup}
   <div class="event__type-item">
     <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${(type === currentType) ? 'checked' : ''}>
-    <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${toCapitalize(type)}</label>
+    <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${capitalizeFirstLetter(type)}</label>
   </div>`, '');
 
   return `
@@ -82,7 +82,7 @@ const createButtonTemplate = (isCreating, isDeleting, isDisabled) => {
     `;
   }
   return `
-    <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting' : 'Delete'}</button>
+    <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
     <button class="event__rollup-btn" type="button"><span class="visually-hidden">Open event</span></button>
     `;
 };
@@ -120,7 +120,7 @@ const createPointEditorTemplate = ({
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${toCapitalize(he.encode(type))}
+              ${capitalizeFirstLetter(he.encode(type))}
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? he.encode(currentDestination.name) : ''}" list="destination-list-1">
             <datalist id="destination-list-1">
@@ -144,7 +144,7 @@ const createPointEditorTemplate = ({
             <input class="event__input  event__input--price" id="event-price-1" type="number" pattern="^\\d+$" name="event-price" value="${he.encode(String(basePrice))}">
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving' : 'Save'}</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
           ${createButtonTemplate(isCreating, isDeleting, isDisabled)}
 
         </header>
